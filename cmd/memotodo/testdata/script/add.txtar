@@ -1,0 +1,15 @@
+# タスクを追加すると ID 1 から採番され、マークダウンファイルに保存される
+env MEMOTODO_DIR=$WORK/data
+exec memotodo add APIを調査する
+stdout '^追加しました: 1 APIを調査する$'
+! stderr .
+grep '^id: 1$' $WORK/data/tasks/0001.md
+grep '^title: APIを調査する$' $WORK/data/tasks/0001.md
+grep '^status: todo$' $WORK/data/tasks/0001.md
+grep '^created: \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}([+-]\d{2}:\d{2}|Z)$' $WORK/data/tasks/0001.md
+grep '^## メモ$' $WORK/data/tasks/0001.md
+
+# 複数の引数はスペースで連結して 1 つのタイトルになる
+exec memotodo add 設計 レビュー を依頼する
+stdout '^追加しました: 2 設計 レビュー を依頼する$'
+grep '^title: 設計 レビュー を依頼する$' $WORK/data/tasks/0002.md
