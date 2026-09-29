@@ -3,6 +3,8 @@ package task
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 	"time"
 )
 
@@ -30,10 +32,25 @@ type Task struct {
 
 // NormalizeTitle はコマンド引数からタイトルを組み立てて検証する。
 func NormalizeTitle(args []string) (string, error) {
-	return "", nil
+	title := strings.TrimSpace(strings.Join(args, " "))
+	if title == "" {
+		return "", ErrEmptyTitle
+	}
+	if strings.ContainsAny(title, "\r\n") {
+		return "", ErrTitleNewline
+	}
+	return title, nil
 }
 
 // Marshal はタスクをマークダウンファイルの内容に変換する。
 func Marshal(t Task) []byte {
-	return nil
+	return fmt.Appendf(nil, `---
+id: %d
+title: %s
+status: %s
+created: %s
+---
+
+## メモ
+`, t.ID, t.Title, t.Status, t.Created.Format(time.RFC3339))
 }
