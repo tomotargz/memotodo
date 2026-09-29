@@ -1,0 +1,22 @@
+env MEMOTODO_DIR=$WORK/data
+
+# タイトルが指定されていない
+! exec memotodo add
+stderr '^エラー: タイトルを指定してください$'
+! stdout .
+
+# タイトルが空白のみ
+! exec memotodo add '   '
+stderr '^エラー: タイトルを指定してください$'
+! stdout .
+
+# エラー時はファイルを作らない
+! exists $WORK/data/tasks
+
+# 保存先に書き込めない
+env MEMOTODO_DIR=$WORK/blocker
+! exec memotodo add 書けない
+stderr '^エラー: '
+! stdout .
+
+-- blocker --

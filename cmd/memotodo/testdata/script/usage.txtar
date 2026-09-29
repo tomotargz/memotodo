@@ -1,0 +1,11 @@
+# サブコマンドなしでは使い方を表示する
+! exec memotodo
+stderr '^使い方: memotodo <コマンド> \[引数\]$'
+stderr 'add'
+! stdout .
+
+# 未知のサブコマンドはエラーと使い方を表示する
+! exec memotodo foo
+stderr '^エラー: 不明なコマンドです: foo$'
+stderr '^使い方: memotodo <コマンド> \[引数\]$'
+! stdout .

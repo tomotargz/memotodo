@@ -1,0 +1,17 @@
+# MEMOTODO_DIR がなければ XDG_DATA_HOME 配下に保存する
+env MEMOTODO_DIR=
+env XDG_DATA_HOME=$WORK/xdg
+env HOME=$WORK/home
+exec memotodo add XDGのタスク
+exists $WORK/xdg/memotodo/tasks/0001.md
+
+# XDG_DATA_HOME もなければホーム配下に保存する
+env XDG_DATA_HOME=
+exec memotodo add ホームのタスク
+exists $WORK/home/.local/share/memotodo/tasks/0001.md
+
+# MEMOTODO_DIR があれば HOME がなくても保存できる
+env HOME=
+env MEMOTODO_DIR=$WORK/data
+exec memotodo add HOMEなし
+exists $WORK/data/tasks/0001.md
