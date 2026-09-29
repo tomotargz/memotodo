@@ -40,11 +40,11 @@ func add(args []string, stdout, stderr io.Writer) int {
 	if err != nil {
 		return fail(stderr, err)
 	}
-	home, err := os.UserHomeDir()
+	dir, err := store.DataDir(os.Getenv, os.UserHomeDir)
 	if err != nil {
 		return fail(stderr, err)
 	}
-	s := store.Store{Dir: store.DataDir(os.Getenv, home)}
+	s := store.Store{Dir: dir}
 	t, err := s.Add(title, time.Now())
 	if err != nil {
 		return fail(stderr, err)

@@ -13,14 +13,19 @@ import (
 )
 
 // DataDir は環境変数とホームディレクトリから保存先ディレクトリを決める。
-func DataDir(getenv func(string) string, home string) string {
+// ホームディレクトリは環境変数で決まらないときだけ取得する。
+func DataDir(getenv func(string) string, home func() (string, error)) (string, error) {
 	if dir := getenv("MEMOTODO_DIR"); dir != "" {
-		return dir
+		return dir, nil
 	}
 	if xdg := getenv("XDG_DATA_HOME"); xdg != "" {
-		return filepath.Join(xdg, "memotodo")
+		return filepath.Join(xdg, "memotodo"), nil
 	}
-	return filepath.Join(home, ".local", "share", "memotodo")
+	h, err := home()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(h, ".local", "share", "memotodo"), nil
 }
 
 // Store は保存先ディレクトリ配下のタスクファイルを扱う。

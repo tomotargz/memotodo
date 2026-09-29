@@ -34,7 +34,12 @@ func TestDataDir(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			getenv := func(key string) string { return tt.env[key] }
-			if got := DataDir(getenv, "/home/user"); got != tt.want {
+			home := func() (string, error) { return "/home/user", nil }
+			got, err := DataDir(getenv, home)
+			if err != nil {
+				t.Fatalf("DataDir() エラー: %v", err)
+			}
+			if got != tt.want {
 				t.Errorf("DataDir() = %q, want %q", got, tt.want)
 			}
 		})
