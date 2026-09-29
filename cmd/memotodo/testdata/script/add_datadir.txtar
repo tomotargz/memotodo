@@ -9,3 +9,9 @@ exists $WORK/xdg/memotodo/tasks/0001.md
 env XDG_DATA_HOME=
 exec memotodo add ホームのタスク
 exists $WORK/home/.local/share/memotodo/tasks/0001.md
+
+# MEMOTODO_DIR があれば HOME がなくても保存できる
+env HOME=
+env MEMOTODO_DIR=$WORK/data
+exec memotodo add HOMEなし
+exists $WORK/data/tasks/0001.md
